@@ -30,7 +30,7 @@ app.get('/', function (req, res) {
 
 // GET request for API route
 app.get('/api/notes', (req, res) => {
-    fs.sendFile(path.join(__dirname, './db/db.json'));
+    res.send(require('./db/db.json'));
 });
 
 //POST request for API route
@@ -43,7 +43,7 @@ app.post('/api/notes', function (req, res) {
         return notes;
     }).then(function(notes) {
         writeFileAsync('./db/db.json', JSON.stringify(notes));
-        res.json(note);
+        res.send(require('./db/db.json'));
     })
 });
 
