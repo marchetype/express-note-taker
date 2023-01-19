@@ -3,15 +3,17 @@ const path = require('path');
 const fs = require('fs');
 const util = require('util');
 
-const readFileAsync = util.promisify(fs.readFile);
-const writeFileAsync = util.promisify(fs.writeFile);
+    const readFileAsync = util.promisify(fs.readFile);
+    const writeFileAsync = util.promisify(fs.writeFile);
 
-// server
+// server setup
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.urlencoded ({ extended : true }));
 app.use(express.json());
+
+app.use(express.static('./public'));
 
 // HTML Routes
 app.get('/notes', function (req, res) {
@@ -27,11 +29,8 @@ app.get('/', function (req, res) {
 });
 
 // GET request for API route
-app.get('/api/notes', function (req, res) {
-    readFileAsync('./db/db.json', 'utf8').then(function(data) {
-        notes = [].concat(JSON.parse(data));
-        res.json(notes);
-    })
+app.get('/api/notes', (req, res) => {
+    fs.sendFile(path.join(__dirname, './db/db.json'));
 });
 
 //POST request for API route
