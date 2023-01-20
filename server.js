@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const db = require('./db/db.json');
 const fs = require('fs');
 const util = require('util');
 
@@ -19,7 +20,7 @@ app.use(express.static('./public'));
 app.get('/api/notes', (req, res) => {
     readFileAsync('./db/db.json', 'utf8').then(function(data) {
         notes = [].concat(JSON.parse(data));
-        res.send(require('./db/db.json'));
+        res.send(db);
     })
 
 });
@@ -34,7 +35,7 @@ app.post('/api/notes', function (req, res) {
         return notes;
     }).then(function(notes) {
         writeFileAsync('./db/db.json', JSON.stringify(notes));
-        res.send(require('./db/db.json'));
+        res.send(db);
     })
 });
 
